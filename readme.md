@@ -1,20 +1,12 @@
-# Bayesian Net - 2024
+# Reinforcement Learning - 2024
 
 ## Description
 
-This project implements a **Bayesian Network** with a focus on **inference by enumeration** to accurately estimate gem positions within a grid. A noisy sonar sensor provides positional data, which the network uses to make these estimations. For more details, please refer to `./pdf/consignes.pdf`.
-
-<p align="center">
-  <img src="./rapport/src/intro.png" alt="intro problem" width="700"/>
-  <br/>
-  <strong>Instance of the Bayesian Network figuring the gem positions withing a 10x10 grid.</strong>
-</p>
+For more details, please refer to `./pdf/consignes.pdf`.
 
 ## Features
 
-- **Bayesian Network Implementation**: Solves the problem using a graph-based structure called a "Bayesian Network."
-- **Visualization**: Provides a visual demonstration of the inference-by-enumeration algorithm, showing how the agent estimates gem positions based on Bayesian Network predictions.
-
+...
 
 
 ## Usage
@@ -27,13 +19,13 @@ Make sure you have `Python >= 3.11` installed.
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/Ant0in/Projet3-IA.git
+   git clone https://github.com/Ant0in/Projet4-IA.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd Projet3-IA/
+   cd Projet4-IA/
    ```
 
 3. Install dependencies:
@@ -45,7 +37,7 @@ Make sure you have `Python >= 3.11` installed.
 4. Run the project:
 
    ```bash
-   python ".\main.py" --grid_size 10 --n_gems 3 --moves D R R R R D R D D --gems_positions "(5,2) (0,7) (8,8)"
+   python ".\main.py" (--options)
    ```
 
 ## License
