@@ -1,5 +1,5 @@
 laser-learning-environment==0.2.6
 typing-extensions==4.12.2
 opencv-python==4.10.0.84
-seaborn==0.12.2
+seaborn==0.13.0
 rlenv
