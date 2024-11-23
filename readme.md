@@ -28,10 +28,13 @@ Make sure you have `Python >= 3.11` installed.
    cd Projet4-IA/
    ```
 
-3. Install dependencies:
+3. Install poetry env:
    
    ```bash
-   pip install -r "requirements.txt"
+   pip install poetry
+   poetry install
+   poetry shell
+   poetry update
    ```
 
 4. Run the project:
