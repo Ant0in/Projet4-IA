@@ -1,10 +1,12 @@
-from .env import Labyrinth
 
+from .env import Labyrinth
 import numpy as np
 import random
 from collections import defaultdict
 
+
 class QLearning:
+
     """
     Q-Learning algorithm for training an agent in a given environment.
     The agent learns an optimal policy for selecting actions to maximize cumulative rewards.

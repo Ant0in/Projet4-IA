@@ -88,19 +88,18 @@ def random_moves(env: Labyrinth, n_steps: int) -> None:
 
 if __name__ == "__main__":
     
-    env = Labyrinth(malfunction_probability = 0.1)
+    env = Labyrinth(malfunction_probability=0.1)
     env.reset()
 
     # Uncomment for random moves
     # random_moves(env, 10_000)
-    
-    # Uncomment for Value Iteration
-    algo: ValueIteration = ValueIteration(env=env, gamma=0.9)
-    algo.train(50)
-    plot_values(algo.get_value_table())
+
+    # algo: ValueIteration = ValueIteration(env=env, gamma=0.9)
+    # algo.train(50)
+    # plot_values(algo.get_value_table())
 
     # Uncomment for Q-learning
-    # algo = QLearning(env=env,alpha=.1,epsilon=.1)
-    # algo = QLearning(env=env,alpha=.1,c=100)
-    # algo.train(10_000)
-    # plot_qvalues(algo.get_q_table(),action_symbols=Labyrinth.ACTION_SYMBOLS)
+    algo: QLearning = QLearning(env=env,alpha=.1,epsilon=.1)
+    # algo: QLearning = QLearning(env=env,alpha=.1,c=100)
+    algo.train(10_000)
+    plot_qvalues(algo.get_q_table(),action_symbols=Labyrinth.ACTION_SYMBOLS)
