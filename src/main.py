@@ -96,7 +96,7 @@ if __name__ == "__main__":
     
     # Uncomment for Value Iteration
     algo = ValueIteration(env=env)
-    algo.train(50)
+    algo.train(500)
     plot_values(algo.get_value_table())
 
     # Uncomment for Q-learning

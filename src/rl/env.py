@@ -100,6 +100,19 @@ class Labyrinth:
         reward = self._execute_action(action)
         return reward
 
+    def step_without_corruption(self, action: int, state: tuple[int, int] | None = None) -> tuple[tuple[int, int], float]:
+
+        if state is not None:
+            self.set_state(state)
+
+        # On vérifie que l'action est faisable, sinon on procède à un lle.Action.STAY.
+        action: lle.Action = self._validate_action(action=action)
+        # Puis on exécute, on récupère la reward puis on reset()
+        reward: float = self._execute_action(action)
+        s_prime: tuple[int, int] = self.get_observation()
+        self.reset()
+        return s_prime, reward
+
     def _validate_action(self, action: int) -> lle.Action:
         """
         Validate and adjust the action if it's unavailable.
