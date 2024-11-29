@@ -84,22 +84,20 @@ def random_moves(env: Labyrinth, n_steps: int) -> None:
             print("collected reward =", episode_rewards)
             env.reset()
             episode_rewards = 0
-        env.render()
+        #env.render()
 
 if __name__ == "__main__":
     
     env = Labyrinth(malfunction_probability = 0.1)
-
     env.reset()
-    env.render()
 
     # Uncomment for random moves
-    random_moves(env,10_000)
+    # random_moves(env, 10_000)
     
     # Uncomment for Value Iteration
-    # algo = ValueIteration(env=env)
-    # algo.train(50)
-    # plot_values(algo.get_value_table())
+    algo = ValueIteration(env=env)
+    algo.train(50)
+    plot_values(algo.get_value_table())
 
     # Uncomment for Q-learning
     # algo = QLearning(env=env,alpha=.1,epsilon=.1)

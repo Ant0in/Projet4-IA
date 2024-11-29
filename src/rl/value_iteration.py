@@ -1,7 +1,14 @@
+
+
 import numpy as np
 from .env import Labyrinth
 from collections import defaultdict
+from lle import Action
+
+
+
 class ValueIteration:
+
     """
     Value Iteration algorithm for solving a reinforcement learning environment.
     The algorithm iteratively updates the estimated values of states to find an optimal policy.
@@ -12,25 +19,17 @@ class ValueIteration:
     ...
     """
     
-    def __init__(self, env: Labyrinth, gamma: float = 1):
-        """
-        Initialize the Value Iteration agent with specified parameters.
+    def __init__(self, env: Labyrinth, gamma: float = 1.0):
 
-        Parameters:
-        - env (Labyrinth): The environment in which the agent operates.
-        - gamma (float): Discount factor (0 < gamma <= 1) for future rewards.
-        """
-        self.env = env
-        self.gamma = gamma  
+        self.env: Labyrinth = env
+        self.gamma: float = gamma
+        self.value_table: np.ndarray = np.zeros(env.get_map_size())
 
-    def train(self,  n_updates: int):
-        """
-        Train the agent using value iteration for a specified number of updates.
 
-        Parameters:
-        - n_updates (int): The total number of updates to perform.
-        """
-        raise NotImplementedError()
+    def train(self, n_updates: int):
+
+        for nth_update in range(n_updates):
+            print(f'Update : {nth_update}')
 
 
     def get_value_table(self) -> np.ndarray:
@@ -40,4 +39,4 @@ class ValueIteration:
         Returns:
         - np.ndarray: A 2D array representing the estimated values for each state.
         """
-        raise NotImplementedError()
+        return self.value_table
