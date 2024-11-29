@@ -33,7 +33,7 @@ class ValueIteration:
         env: Labyrinth = self.env
 
         # On fait n itérations de l'algorithme.
-        for nth_update in range(n_updates):
+        for nth_update in range(1, n_updates+1):
 
             print(f'[i] Itération #{nth_update} - Gamma : {self.gamma}')
 

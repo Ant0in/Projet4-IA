@@ -1,11 +1,12 @@
+
 from rl.env import Labyrinth
 from rl.qlearning import QLearning
 from rl.value_iteration import ValueIteration
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import matplotlib.pyplot as plt
 from numpy.typing import NDArray
+
 
 
 def plot_values(values: NDArray[np.float64]) -> None:
@@ -86,6 +87,8 @@ def random_moves(env: Labyrinth, n_steps: int) -> None:
             episode_rewards = 0
         #env.render()
 
+
+
 if __name__ == "__main__":
     
     env = Labyrinth(malfunction_probability=0.1)
@@ -103,3 +106,4 @@ if __name__ == "__main__":
     # algo: QLearning = QLearning(env=env,alpha=.1,c=100)
     algo.train(10_000)
     plot_qvalues(algo.get_q_table(),action_symbols=Labyrinth.ACTION_SYMBOLS)
+

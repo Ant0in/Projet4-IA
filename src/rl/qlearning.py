@@ -21,6 +21,7 @@ class QLearning:
     """
 
     def __init__(self, env: Labyrinth, gamma: float = 0.9, alpha: float = 0.1, epsilon: float = 0, c: float = 0):
+        
         """
         Initialize the Q-Learning agent with specified parameters.
 
@@ -31,6 +32,7 @@ class QLearning:
         - epsilon (float): Probability (0 <= epsilon <= 1) for exploration in action selection.
         - c (float): Exploration adjustment parameter.
         """
+
         self.env = env
         self.gamma = gamma          
         self.alpha = alpha          
@@ -39,20 +41,25 @@ class QLearning:
         
 
     def get_q_table(self) -> np.ndarray:
+        
         """
         Retrieve the Q-table as a 3D numpy array for visualization.
 
         Returns:
         - np.ndarray: A 3D array representing Q-values for each state-action pair.
         """
+
         raise NotImplementedError()
 
 
     def train(self, n_steps: int):
+        
         """
         Train the Q-learning agent over a specified number of steps.
 
         Parameters:
         - n_steps (int): Total number of steps for training.
         """
+
         raise NotImplementedError()
+    
