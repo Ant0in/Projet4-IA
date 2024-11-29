@@ -2,8 +2,10 @@
 
 import numpy as np
 from .env import Labyrinth
-from collections import defaultdict
-from lle import Action
+
+
+# alias
+State = tuple[int, int]
 
 
 
@@ -23,8 +25,7 @@ class ValueIteration:
 
         self.env: Labyrinth = env
         self.gamma: float = gamma
-        self.possible_states: list[tuple[int, int]] = env.get_valid_states()
-
+        self.possible_states: list[State] = env.get_valid_states()
         self.value_table: np.ndarray = np.zeros(env.get_map_size())
 
     def train(self, n_updates: int) -> None:
@@ -34,13 +35,13 @@ class ValueIteration:
         # On fait n itérations de l'algorithme.
         for nth_update in range(n_updates):
 
-            print(f'[i] Itération #{nth_update}')
+            print(f'[i] Itération #{nth_update} - Gamma : {self.gamma}')
 
             for s in self.possible_states:
 
                 # On récupère les actions possibles, puis on regarde ce qu'elles font en reward et en state terminal
                 # On calcule tout les états accessibles ainsi que leurs reward.
-                s_prime_reward_dict: dict[tuple[int, int]: float] = dict()
+                s_prime_reward_dict: dict[State: float] = dict()
 
                 for a in env.get_all_actions():
                     s_next, r = env.step_without_corruption(action=a, state=s)
@@ -69,19 +70,22 @@ class ValueIteration:
                 new_v_value: float = max(values)
                 self.set_state_value(s=s, value=new_v_value)
 
-    def get_state_value(self, s: tuple[int, int]) -> float:
+    def get_state_value(self, s: State) -> float:
+        # Get state value in the value table
         return self.get_value_table()[s[0], s[1]]
     
-    def set_state_value(self, s: tuple[int, int], value: float) -> None:
+    def set_state_value(self, s: State, value: float) -> None:
+        # Set state value in the value table
         self.get_value_table()[s[0], s[1]] = value
 
     def get_value_table(self) -> np.ndarray:
+        
         """
         Retrieve the current value table as a 2D numpy array.
 
         Returns:
         - np.ndarray: A 2D array representing the estimated values for each state.
         """
+
         return self.value_table
     
-

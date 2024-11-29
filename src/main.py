@@ -95,8 +95,8 @@ if __name__ == "__main__":
     # random_moves(env, 10_000)
     
     # Uncomment for Value Iteration
-    algo = ValueIteration(env=env)
-    algo.train(500)
+    algo: ValueIteration = ValueIteration(env=env, gamma=0.9)
+    algo.train(50)
     plot_values(algo.get_value_table())
 
     # Uncomment for Q-learning
