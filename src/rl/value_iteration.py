@@ -21,7 +21,7 @@ class ValueIteration:
     ...
     """
     
-    def __init__(self, env: Labyrinth, gamma: float = 1.0):
+    def __init__(self, env: Labyrinth, gamma: float = 1.0) -> None:
 
         self.env: Labyrinth = env
         self.gamma: float = gamma

@@ -76,6 +76,17 @@ class Labyrinth:
         """
         return list(range(len(Labyrinth.ACTION_SYMBOLS)))
 
+    def get_all_valid_actions(self) -> list[int]:
+        
+        all_actions: list[int] = self.get_all_actions()
+        valid_actions: list[int] = list()
+
+        for a in all_actions:
+            if lle.Action(a) in self._world.available_actions()[0]:
+                valid_actions.append(a)
+
+        return valid_actions
+
     def step(self, action: int, state: tuple[int, int] = None) -> float:
         """
         Perform an action in the environment and return the associated reward.

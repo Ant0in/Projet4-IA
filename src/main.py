@@ -102,8 +102,7 @@ if __name__ == "__main__":
     # plot_values(algo.get_value_table())
 
     # Uncomment for Q-learning
-    algo: QLearning = QLearning(env=env,alpha=.1,epsilon=.1)
-    # algo: QLearning = QLearning(env=env,alpha=.1,c=100)
-    algo.train(10_000)
+    algo: QLearning = QLearning(env=env, gamma=.9, alpha=.1, epsilon=.1, c=100)
+    algo.train(3000)
     plot_qvalues(algo.get_q_table(),action_symbols=Labyrinth.ACTION_SYMBOLS)
 
