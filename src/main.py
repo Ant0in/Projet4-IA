@@ -104,9 +104,10 @@ if __name__ == "__main__":
 
     # Uncomment for Q-learning
 
-    steps: int = 20_000
+    steps: int = 10_000
 
-    algo: QLearning = QLearning(env=env, gamma=.9, alpha=.1, epsilon=0, c=100)
+    algo: QLearning = QLearning(env=env, gamma=1, alpha=.1, epsilon=0, c=100)
     algo.train(steps)
-    plot_qvalues(algo.get_q_table(),action_symbols=Labyrinth.ACTION_SYMBOLS)
+    print(algo.agent_container.get_avg_reward_vector())
+    # plot_qvalues(algo.get_q_table(), action_symbols=Labyrinth.ACTION_SYMBOLS)
 

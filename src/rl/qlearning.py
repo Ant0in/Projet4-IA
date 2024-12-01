@@ -118,6 +118,7 @@ class QLearning:
             # Tant que l'exploration n'est pas terminée (sortie), on continue à explorer. Sinon reset.
             if env.is_done():
                 self.agent_container.add_score_to_memory_then_reset()  # Stockage du score avant reset
+                self.agent_container.add_steps_to_memory_then_reset()  # Stockage des steps avant reset
                 init_state: State = env.reset()
                 env.set_state(state=init_state)
             
@@ -141,6 +142,7 @@ class QLearning:
             self.increment_state_action_exploration_number(s=previous_state, action_id=action, increment=1)
             
             self.agent_container.increment_current_score(v=reward)  # On incrémente le score de l'agent
+            self.agent_container.increment_current_steps(s=1)  # On incrémente les steps de l'agent (1)
 
             # Ensuite, on vérifie quelle est la meilleure prochaine action (+bonus)
             best_next_action: int = np.argmax([qv + ((self.c) / (self.get_state_action_exploration_number(s=env.get_observation(), action_id=aid) + 1))
