@@ -2,6 +2,7 @@
 from rl.env import Labyrinth
 from rl.qlearning import QLearning
 from rl.value_iteration import ValueIteration
+from rl.agent_container import AgentScoreContainer
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -102,7 +103,12 @@ if __name__ == "__main__":
     # plot_values(algo.get_value_table())
 
     # Uncomment for Q-learning
-    algo: QLearning = QLearning(env=env, gamma=.9, alpha=.1, epsilon=.1, c=100)
-    algo.train(10000)
-    plot_qvalues(algo.get_q_table(),action_symbols=Labyrinth.ACTION_SYMBOLS)
+
+    steps: int = 100_000
+
+    algo: QLearning = QLearning(env=env, gamma=.9, alpha=.1, epsilon=.01, c=0)
+    algo.train(steps)
+    algo.plot_state_exploration_heatmap()
+    algo.agent_container.plot_scores(steps=steps)
+    # plot_qvalues(algo.get_q_table(),action_symbols=Labyrinth.ACTION_SYMBOLS)
 

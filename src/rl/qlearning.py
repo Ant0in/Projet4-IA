@@ -7,6 +7,9 @@ from collections import defaultdict
 from .agent_container import AgentScoreContainer
 import time
 
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 
 # alias
 State = tuple[int, int]
@@ -82,6 +85,19 @@ class QLearning:
     def increment_state_action_exploration_number(self, s: State, action_id: int, increment: int = 1) -> None:
         self.explored_dict[(s, action_id)] += increment
 
+    def plot_state_exploration_heatmap(self) -> None:
+        
+        exploration_table: np.ndarray = np.zeros(self.env.get_map_size())
+        for s in self.possible_states:
+            v: int = 0
+            for a in self.env.get_all_actions(): v += self.explored_dict[(s, a)]
+            exploration_table[s[0], s[1]] = v
+        
+        assert exploration_table.ndim == 2, f"Expected 2D array of shape (height, width), got shape {exploration_table.shape}"
+        sns.heatmap(exploration_table, annot=True, cbar_kws={'label': 'Exploration Frequency'})
+        plt.show()
+
+
     def train(self, n_steps: int, verbose: bool = True):
         
         """
@@ -140,12 +156,12 @@ class QLearning:
         # Infos (verbose)
 
         if verbose:
-            
+
             delta_time: float = time.time() - start_time
             completions: int = len(self.agent_container.scores)
-            avg_score: float = 0 if completions == 0 else sum(self.agent_container.scores) / completions
-            best_score: float = 0 if completions == 0 else max(self.agent_container.scores)
-            worst_score: float = 0 if completions == 0 else min(self.agent_container.scores)
+            avg_score: float    = 0 if completions == 0 else sum(self.agent_container.scores) / completions
+            best_score: float   = 0 if completions == 0 else max(self.agent_container.scores)
+            worst_score: float  = 0 if completions == 0 else min(self.agent_container.scores)
 
             print('\n\n' + '-'*15 + ' Stats ' + '-'*15)
             print(f'[!] Entrainement terminé en {delta_time:.2f}s')

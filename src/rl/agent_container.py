@@ -1,5 +1,8 @@
 
 
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 
 class AgentScoreContainer:
 
@@ -34,3 +37,12 @@ class AgentScoreContainer:
         self.scores.append(self.current_score)
         self.reset_current_score()
 
+    def plot_scores(self, steps: int) -> None:
+
+        sns.barplot(x=range(len(self.scores)), y=self.scores, color='skyblue')
+        plt.title(f"Score obtenus pour chaque completion du labyrinthe ({steps} steps)")
+        plt.xlabel("Complétions")
+        plt.ylabel("Scores")
+        xticks = range(0, len(self.scores), 1000)
+        plt.xticks(xticks)
+        plt.show()
