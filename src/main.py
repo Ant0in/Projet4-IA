@@ -1,4 +1,5 @@
 
+
 from rl.env import Labyrinth
 from rl.qlearning import QLearning
 from rl.value_iteration import ValueIteration
@@ -95,19 +96,8 @@ if __name__ == "__main__":
     env = Labyrinth(malfunction_probability=0.1)
     env.reset()
 
-    # Uncomment for random moves
-    # random_moves(env, 10_000)
-
-    # algo: ValueIteration = ValueIteration(env=env, gamma=0.9)
-    # algo.train(40)
-    # plot_values(algo.get_value_table())
-
-    # Uncomment for Q-learning
-
-    steps: int = 10_000
-
-    algo: QLearning = QLearning(env=env, gamma=1, alpha=.1, epsilon=0, c=100)
-    algo.train(steps)
-    print(algo.agent_container.get_avg_reward_vector())
-    # plot_qvalues(algo.get_q_table(), action_symbols=Labyrinth.ACTION_SYMBOLS)
+    # Q-learning
+    algo: QLearning = QLearning(env=env, gamma=.9, alpha=.1, epsilon=0, c=100)
+    algo.train(n_steps=10_000, verbose=True)
+    plot_qvalues(algo.get_q_table(), action_symbols=Labyrinth.ACTION_SYMBOLS)
 
