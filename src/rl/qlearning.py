@@ -4,6 +4,9 @@ import numpy as np
 import random
 from collections import defaultdict
 
+from .agent_container import AgentScoreContainer
+import time
+
 
 # alias
 State = tuple[int, int]
@@ -40,7 +43,7 @@ class QLearning:
         self.env: Labyrinth = env
         self.gamma: float = gamma          
         self.alpha: float = alpha          
-        self.epsilon: float = epsilon     
+        self.epsilon: float = epsilon  
 
         # Pour l'exploration et le bonus, on garde un defaultdict des states-actions.
         self.c: float = c
@@ -49,6 +52,9 @@ class QLearning:
         self.possible_states: list[State] = env.get_valid_states()
         # Créer la table de dimension 3 (chaques states (2d) associés aux actions (1d))
         self.qtable: np.ndarray = np.zeros((env.get_map_size() + (len(env.get_all_actions()),)))
+
+        # On garde un objet container pour les reward de l'agent (rapport)
+        self.agent_container: AgentScoreContainer = AgentScoreContainer(init_score=0.0)
         
 
     def get_q_table(self) -> np.ndarray:
@@ -76,7 +82,7 @@ class QLearning:
     def increment_state_action_exploration_number(self, s: State, action_id: int, increment: int = 1) -> None:
         self.explored_dict[(s, action_id)] += increment
 
-    def train(self, n_steps: int):
+    def train(self, n_steps: int, verbose: bool = True):
         
         """
         Train the Q-learning agent over a specified number of steps.
@@ -86,40 +92,67 @@ class QLearning:
         """
 
         env: Labyrinth = self.env
+        env.reset()
+        start_time: int = time.time()
 
         for nth_step in range(1, n_steps+1):
 
-            # On reset rapidement l'environnement à chaque step.
-            env.reset()
-            print(f'[i] Step #{nth_step} - Gamma : {self.gamma}, Epsilon : {self.epsilon}, Alpha : {self.alpha}')
+            if verbose: print(f'[i] Step #{nth_step} - Gamma : {self.gamma}, Epsilon : {self.epsilon}, Alpha : {self.alpha}, C : {self.c}')
 
-            # Tant que l'exploration n'est pas terminée (sortie), on continue à explorer.
-            while not env.is_done():
+            # Tant que l'exploration n'est pas terminée (sortie), on continue à explorer. Sinon reset.
+            if env.is_done():
+                self.agent_container.add_score_to_memory_then_reset()  # Stockage du score avant reset
+                init_state: State = env.reset()
+                env.set_state(state=init_state)
+            
+            # On choisit une exploration aléatoire avec une probabilité epsilon
+            if random.uniform(0, 1) < self.epsilon:
+                action: int = random.choice(env.get_all_valid_actions())
+
+            else:
+
+                # Pour le bonus d'exploration, on récupère le nombre de fois ou l'action a été effectuée dans ce state,
+                # puis on le croise avec le paramètre c.
+                action_with_exploration_bonus: list[float] = [qv + ((self.c) / (self.get_state_action_exploration_number(s=env.get_observation(), action_id=aid) + 1))
+                                                    for aid, qv in enumerate(self.get_state_value(env.get_observation()))]
+
+                action: int = np.argmax(action_with_exploration_bonus)
+
+            # Puis on compute le move.
+            # (on garde un backup du state précédent pour pouvoir update la bonne qvalue)
+            previous_state: State = env.get_observation()
+            reward: float = env.step(action=action)
+            self.increment_state_action_exploration_number(s=previous_state, action_id=action, increment=1)
+            
+            self.agent_container.increment_current_score(v=reward)  # On incrémente le score de l'agent
+
+            # Ensuite, on vérifie quelle est la meilleure prochaine action (+bonus)
+            best_next_action: int = np.argmax([qv + ((self.c) / (self.get_state_action_exploration_number(s=env.get_observation(), action_id=aid) + 1))
+                                                    for aid, qv in enumerate(self.get_state_value(env.get_observation()))])
                 
-                # On choisit une exploration aléatoire avec une probabilité epsilon
-                if random.uniform(0, 1) < self.epsilon:
-                    action: int = random.choice(env.get_all_valid_actions())
-                else:
+            # Enfin, on compute la nouvelle valeur de Q dans la Qtable
+            td_target: float = reward + self.gamma * self.get_state_value(s=env.get_observation())[best_next_action]
+            td_error: float = (1 - self.alpha) * self.get_state_value(s=previous_state)[action]
+            new_qvalue: float = td_error + self.alpha * td_target
+            self.set_state_value(s=previous_state, action_id=action, value=new_qvalue)
 
-                    # Pour le bonus d'exploration, on récupère le nombre de fois ou l'action a été effectuée dans ce state,
-                    # puis on le croise avec le paramètre c.
-                    action_with_exploration_bonus: list[float] = [qv + ((self.c) / (self.get_state_action_exploration_number(s=env.get_observation(), action_id=aid) + 1))
-                                                     for aid, qv in enumerate(self.get_state_value(env.get_observation()))]
 
-                    action: int = np.argmax(action_with_exploration_bonus)
+        # Infos (verbose)
 
-                # Puis on compute le move.
-                # (on garde un backup du state précédent pour pouvoir update la bonne qvalue)
-                previous_state: State = env.get_observation()
-                reward: float = env.step(action=action)
-                self.increment_state_action_exploration_number(s=previous_state, action_id=action, increment=1)
+        if verbose:
+            
+            delta_time: float = time.time() - start_time
+            completions: int = len(self.agent_container.scores)
+            avg_score: float = 0 if completions == 0 else sum(self.agent_container.scores) / completions
+            best_score: float = 0 if completions == 0 else max(self.agent_container.scores)
+            worst_score: float = 0 if completions == 0 else min(self.agent_container.scores)
 
-                # Ensuite, on vérifie quelle est la meilleure prochaine action
-                best_next_action: int = np.argmax(self.get_state_value(env.get_observation()))
-                    
-                # Enfin, on compute la nouvelle valeur de Q dans la Qtable
-                td_target: float = reward + self.gamma * self.get_state_value(s=env.get_observation())[best_next_action]
-                td_error: float = (1 - self.alpha) * self.get_state_value(s=previous_state)[action]
-                new_qvalue: float = td_error + self.alpha * td_target
-                self.set_state_value(s=previous_state, action_id=action, value=new_qvalue)
+            print('\n\n' + '-'*15 + ' Stats ' + '-'*15)
+            print(f'[!] Entrainement terminé en {delta_time:.2f}s')
+            print(f'[!] Total steps : {n_steps}')
+            print(f'[!] Maze Completions : {completions}')
+            print(f'[!] Best score : {best_score}')
+            print(f'[!] Worst score : {worst_score}')
+            print(f'[!] Score average : {avg_score:.2f}')
+            print('-'*37 + '\n\n')
 
