@@ -46,3 +46,4 @@ class AgentScoreContainer:
         xticks = range(0, len(self.scores), 1000)
         plt.xticks(xticks)
         plt.show()
+

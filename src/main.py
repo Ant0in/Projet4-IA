@@ -104,11 +104,9 @@ if __name__ == "__main__":
 
     # Uncomment for Q-learning
 
-    steps: int = 100_000
+    steps: int = 20_000
 
-    algo: QLearning = QLearning(env=env, gamma=.9, alpha=.1, epsilon=.01, c=0)
+    algo: QLearning = QLearning(env=env, gamma=.9, alpha=.1, epsilon=0, c=100)
     algo.train(steps)
-    algo.plot_state_exploration_heatmap()
-    algo.agent_container.plot_scores(steps=steps)
-    # plot_qvalues(algo.get_q_table(),action_symbols=Labyrinth.ACTION_SYMBOLS)
+    plot_qvalues(algo.get_q_table(),action_symbols=Labyrinth.ACTION_SYMBOLS)
 
