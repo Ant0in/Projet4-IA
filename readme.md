@@ -16,34 +16,49 @@ This project implements reinforcement learning algorithms, including Value Itera
 Make sure you have `Python >= 3.11` installed.
 
 
-### Running the Project
+## Features
+
+- **Q-Learning and Value Iteration Implementations**: Algorithms designed to help the agent learn the optimal policy for navigating a maze.
+
+- **Model Persistence**: Load and save trained models using `pickle`, allowing the agent to retain its training for future use.
+
+- **Highly Configurable Parameters**: Easily adjust algorithm parameters to fine-tune performance. Refer to the `Usage` section for detailed instructions. 
+
+## Install the Project
 
 1. Clone the repository:
-
    ```bash
    git clone https://github.com/Ant0in/Projet4-IA.git
    ```
 
-2. Navigate to the project directory:
-
+2. Navigate to the **project directory**:
    ```bash
    cd Projet4-IA/
    ```
 
-3. Install and setup poetry env:
-   
+3. Install **Poetry** (if not already installed):
    ```bash
    pip install poetry
-   poetry install
-   poetry shell
-   poetry update // optional
    ```
 
-4. Run the project:
-
+4. **Install** the project dependencies using **Poetry**:
    ```bash
-   python ".\main.py" (--options)
+   poetry install
    ```
+
+5. Activate the **virtual environment**:
+   ```bash
+   poetry shell
+   ```
+
+6. **Update** dependencies to their latest compatible versions *(Optional)*:
+   ```bash
+   poetry update
+   ```
+
+## Usage
+
+...
 
 ## License
 
