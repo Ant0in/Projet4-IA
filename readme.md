@@ -13,7 +13,7 @@ This project implements reinforcement learning algorithms, including Value Itera
 
 ## Usage
 
-Make sure you have `Python >= 3.11` installed.
+Make sure you have `3.10 <= Python < 3.13` installed.
 
 
 ## Features
