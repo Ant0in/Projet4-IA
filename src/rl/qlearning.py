@@ -97,8 +97,7 @@ class QLearning:
         sns.heatmap(exploration_table, annot=True, cbar_kws={'label': 'Exploration Frequency'})
         plt.show()
 
-
-    def train(self, n_steps: int, verbose: bool = True):
+    def train(self, n_steps: int, verbose: bool = True) -> None:
         
         """
         Train the Q-learning agent over a specified number of steps.

@@ -1,8 +1,10 @@
 
 
 import numpy as np
+import time
 from .env import Labyrinth
-
+from .pickle_helper import PickleHelper
+from .agent_container import AgentScoreContainer
 
 # alias
 State = tuple[int, int]
@@ -28,14 +30,47 @@ class ValueIteration:
         self.possible_states: list[State] = env.get_valid_states()
         self.value_table: np.ndarray = np.zeros(env.get_map_size())
 
-    def train(self, n_updates: int) -> None:
+    def load_model(self, fp: str) -> None:
+        # On load le modèle pour ValueIteration (ndarray 2d)
+        data: np.ndarray | None = PickleHelper.pickle_safeload(fp=fp)
+        if data is not None: self.set_value_table(vtable=data)
+
+    def save_model(self, fp: str) -> bool:
+        # On save le modèle pour ValueIteration (ndarray 2d)
+        rc: bool = PickleHelper.pickle_safedump(fp=fp, data=self.value_table)
+        return rc
+
+    def get_value_table(self) -> np.ndarray:
+        
+        """
+        Retrieve the current value table as a 2D numpy array.
+
+        Returns:
+        - np.ndarray: A 2D array representing the estimated values for each state.
+        """
+
+        return self.value_table
+
+    def set_value_table(self, vtable: np.ndarray) -> None:
+        self.value_table = vtable
+
+    def get_state_value(self, s: State) -> float:
+        # Get state value in the value table
+        return self.get_value_table()[s[0], s[1]]
+    
+    def set_state_value(self, s: State, value: float) -> None:
+        # Set state value in the value table
+        self.get_value_table()[s[0], s[1]] = value
+
+    def train(self, n_updates: int, verbose: bool = True) -> None:
 
         env: Labyrinth = self.env
+        start_time: float = time.time()
 
         # On fait n itérations de l'algorithme.
         for nth_update in range(1, n_updates+1):
 
-            print(f'[i] Itération #{nth_update} - Gamma : {self.gamma}')
+            if verbose: print(f'[i] Itération #{nth_update} - Gamma : {self.gamma}')
 
             for s in self.possible_states:
 
@@ -69,23 +104,12 @@ class ValueIteration:
 
                 new_v_value: float = max(values)
                 self.set_state_value(s=s, value=new_v_value)
-
-    def get_state_value(self, s: State) -> float:
-        # Get state value in the value table
-        return self.get_value_table()[s[0], s[1]]
-    
-    def set_state_value(self, s: State, value: float) -> None:
-        # Set state value in the value table
-        self.get_value_table()[s[0], s[1]] = value
-
-    def get_value_table(self) -> np.ndarray:
         
-        """
-        Retrieve the current value table as a 2D numpy array.
+        if verbose:
+            
+            delta_time: float = time.time() - start_time
+            print('\n\n' + '-'*15 + ' Stats ' + '-'*15)
+            print(f'[!] Entrainement terminé en {delta_time:.2f}s')
+            print(f'[!] Total steps : {n_updates}')
+            print('-'*37 + '\n\n')
 
-        Returns:
-        - np.ndarray: A 2D array representing the estimated values for each state.
-        """
-
-        return self.value_table
-    

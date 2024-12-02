@@ -95,9 +95,7 @@ if __name__ == "__main__":
     
     env = Labyrinth(malfunction_probability=0.1)
     env.reset()
-
-    # Q-learning
-    algo: QLearning = QLearning(env=env, gamma=.9, alpha=.1, epsilon=0, c=100)
-    algo.train(n_steps=10_000, verbose=True)
-    plot_qvalues(algo.get_q_table(), action_symbols=Labyrinth.ACTION_SYMBOLS)
+    algo: ValueIteration = ValueIteration(env=env, gamma=.9)
+    algo.train(n_updates=1000, verbose=True)
+    plot_values(values=algo.get_value_table())
 

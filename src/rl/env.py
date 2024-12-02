@@ -1,11 +1,18 @@
+
+
 from itertools import product
 import random
 import numpy as np
 import lle
+
+
 BOTTOM_LEFT_EXIT = (6,0)
 
+
 class Labyrinth:
+
     ACTION_SYMBOLS = ['↑', '↓', '→', '←']  # NORTH, SOUTH, EAST, WEST
+
     def __init__(self, malfunction_probability: float = 0.0):
         """
         Initialize the Labyrinth environment.
