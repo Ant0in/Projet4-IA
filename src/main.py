@@ -1,9 +1,9 @@
 
 
-from rl.env import Labyrinth
-from rl.qlearning import QLearning
-from rl.value_iteration import ValueIteration
-from rl.agent_container import AgentScoreContainer
+from src.rl.env import Labyrinth
+from src.rl.qlearning import QLearning
+from src.rl.value_iteration import ValueIteration
+from src.rl.agent_container import AgentScoreContainer
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -89,13 +89,4 @@ def random_moves(env: Labyrinth, n_steps: int) -> None:
             episode_rewards = 0
         #env.render()
 
-
-
-if __name__ == "__main__":
-    
-    env = Labyrinth(malfunction_probability=0.1)
-    env.reset()
-    algo: ValueIteration = ValueIteration(env=env, gamma=.9)
-    algo.train(n_updates=1000, verbose=True)
-    plot_values(values=algo.get_value_table())
 

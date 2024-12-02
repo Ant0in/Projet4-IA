@@ -1,11 +1,13 @@
 
+
 from .env import Labyrinth
+from .agent_container import AgentScoreContainer
+from .pickle_helper import PickleHelper
+
 import numpy as np
 import random
-from collections import defaultdict
-
-from .agent_container import AgentScoreContainer
 import time
+from collections import defaultdict
 
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -70,7 +72,20 @@ class QLearning:
         """
 
         return self.qtable
-    
+
+    def set_q_table(self, new_qtable: np.ndarray) -> None:
+        self.qtable = new_qtable
+
+    def load_model(self, fp: str) -> None:
+        # On load le modèle pour Qlearning (ndarray 3d)
+        data: np.ndarray | None = PickleHelper.pickle_safeload(fp=fp)
+        if data is not None: self.set_q_table(new_qtable=data)
+
+    def save_model(self, fp: str) -> bool:
+        # On save le modèle pour Qlearning (ndarray 3d)
+        rc: bool = PickleHelper.pickle_safedump(fp=fp, data=self.qtable)
+        return rc
+
     def get_state_value(self, s: State) -> float:
         # Get state value in the qvalue table
         return self.get_q_table()[s[0], s[1]]

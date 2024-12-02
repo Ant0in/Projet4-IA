@@ -1,7 +1,7 @@
 
 
-from src.rl import QLearning, ValueIteration
-from src.rl import Labyrinth
+from src.rl import QLearning, ValueIteration, Labyrinth
+from src.main import plot_qvalues, plot_values
 import argparse
 
 
@@ -41,18 +41,65 @@ class MainExecutor:
         return vars(args)
 
     @staticmethod
-    def main(parameters: dict) -> None:
+    def execute_valueiteration(parameters: dict) -> None:
+        
+        env: Labyrinth = Labyrinth(malfunction_probability=parameters['p'])
+        algo: ValueIteration = ValueIteration(env=env, gamma=parameters['gamma'])
 
-        # TODO : Executor
-        print(parameters)
+        # Safe load
+        if parameters['load_model']:
+            algo.load_model(fp=parameters['load_model'])
+
+        # Train
+        algo.train(n_updates=parameters['steps'], verbose=parameters['verbose'])
+        
+        # Safe dump
+        if parameters['save_model']:
+            algo.save_model(fp=parameters['save_model'])
+
+        plot_values(values=algo.get_value_table())
+
+    @staticmethod
+    def execute_qlearning(parameters: dict) -> None:
+        
+        env: Labyrinth = Labyrinth(malfunction_probability=parameters['p'])
+        algo: QLearning = QLearning(
+            env=env,
+            gamma=parameters['gamma'],
+            alpha=parameters['alpha'],
+            epsilon=parameters['epsilon'],
+            c=parameters['c']
+        )
+
+        # Safe load
+        if parameters['load_model']:
+            algo.load_model(fp=parameters['load_model'])
+
+        # Train
+        algo.train(n_steps=parameters['steps'], verbose=parameters['verbose'])
+       
+        # Safe dump
+        if parameters['save_model']:
+            algo.save_model(fp=parameters['save_model'])
+
+        plot_qvalues(q_values=algo.get_q_table(), action_symbols=algo.env.ACTION_SYMBOLS)
+
+    @staticmethod
+    def main_exec(parameters: dict) -> None:
+
+        match parameters['algo']:
+            case 'qlearning': MainExecutor.execute_qlearning(parameters=parameters)
+            case 'valueiteration': MainExecutor.execute_valueiteration(parameters=parameters)
+            case _: raise NotImplementedError()
 
 
 
+# if __name__ == "__maison__" ? >__<"
 
 if __name__ == "__main__":
     
     parameters: dict = MainExecutor.main_parser()
-    MainExecutor.main(parameters=parameters)
+    MainExecutor.main_exec(parameters=parameters)
 
 
     # usage example:
