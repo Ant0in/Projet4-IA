@@ -2,11 +2,13 @@
 
 ## Description
 
-For more details, please refer to `./pdf/consignes.pdf`.
+This project implements reinforcement learning algorithms, including Value Iteration and Q-learning, with a focus on $\epsilon$-greedy and aggressive exploration strategies to enhance decision-making in uncertain environments. For more details, please refer to `./pdf/consignes.pdf`.
 
-## Features
-
-...
+<p align="center">
+  <img src="./rapport/src/intro2.png" alt="intro problem" width="450"/>
+  <br/>
+  <strong>Instance of the best policy calculated after 10 000 steps for the introductive maze.</strong>
+</p>
 
 
 ## Usage
@@ -28,13 +30,13 @@ Make sure you have `Python >= 3.11` installed.
    cd Projet4-IA/
    ```
 
-3. Install poetry env:
+3. Install and setup poetry env:
    
    ```bash
    pip install poetry
    poetry install
    poetry shell
-   poetry update
+   poetry update // optional
    ```
 
 4. Run the project:
