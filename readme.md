@@ -58,7 +58,46 @@ Make sure you have `3.10 <= Python < 3.13` installed.
 
 ## Usage
 
-...
+When installed, run the project through the `main.py` file. 
+The main file is located at `Projet4-IA/main.py`.
+
+### Required Parameters (Non-positional):
+- The probability `p` of the environment not being deterministic. Value must be a **float** between `0` and `1`.
+- The number of `steps` for training. Value must be a **positive integer** or `0`.
+- The algorithm used to train the agent. Possible choices are `valueiteration` or `qlearning`.
+
+For the 2 possible algorithm, specific training parameters are required **(but positional)**. See below :
+
+- **Value Iteration** Algorithm `valueiteration` :
+   - **Discount factor** `gamma`, which decreases the positive reward gained by the agent over time. Value must be a **float** between `0` and `1` (where `1` means **no discount**).
+
+- **Qlearning** Algorithm `qlearning` :
+   - **Discount factor** `gamma` as described above.
+   - **Learning rate** `alpha`, which controls how much the agent learns from new training steps compared to trusting its previous knowledge. Value must be a **float** between `0` and `1`.
+   - **Greed factor** `epsilon`, which indicates the probability of the agent taking a random action instead of the best-known action. Value must be a **float** between `0` and `1`.
+   - **Exploration bonus** `c`, which increases the agent's interest in states it has never explored before. Value must be a **positive integer** or `0`.
+
+### Optional parameters : 
+
+- `--verbose`: Enables or disables verbose mode. **Enabled by default**.
+- `--save_model "filepath"`: Saves training data to a `.pkl` file. Saving happens **after training**.
+- `--load_model "filepath"`: Loads training data from a `.pkl` file. Loading happens **before training**.
+
+
+### Running Examples:
+
+1. Running the Value Iteration algorithm with a high `gamma` for **10,000 steps** in a `0.1` probability undeterministic environment, and saving training data:
+
+   ```bash
+   python .\main.py 0.1 10000 valueiteration --gamma 0.9 --save_model './model_xyz.pkl'
+   ```
+
+2. Loading a model and training it for 5000 steps with the Q-Learning algorithm, using a high **exploration bonus** and very low **exploitation of knowledge (`epsilon`)**:
+
+   ```bash
+   python .\main.py 0.1 5000 qlearning --gamma 0.9 --alpha 0.1 --epsilon 0.0 --c 1000 --load_model './model_xyz.pkl'
+   ```
+
 
 ## License
 
